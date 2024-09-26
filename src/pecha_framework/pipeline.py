@@ -29,8 +29,24 @@ class Pipeline:
     def __init__(self, components=None, **component_kwargs):
         self.components = []
         if components:
+            # check if the components requirements are met.
+            self.check_dependencies(components)
+            # Add the components to the pipeline
             for name in components:
                 self.add_pipe(name, **component_kwargs.get(name, {}))
+
+    def check_dependencies(self, components):
+        """
+        Check if the component depending on other components are present before in the
+        pipeline.
+        """
+        for idx, component in enumerate(components):
+            component_cls = component_registry[component]
+            for required_component in component_cls.requires:
+                if required_component not in components[:idx]:
+                    raise ValueError(
+                        f"Component '{component}' requires '{required_component}'"
+                    )
 
     def add_pipe(self, name, **kwargs):
         """Add a component to the pipeline by name."""
