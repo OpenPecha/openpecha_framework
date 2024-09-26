@@ -1,3 +1,5 @@
+import pytest
+
 from pecha_framework.pipeline import Document, Pipe, Pipeline
 
 
@@ -75,4 +77,16 @@ def test_pipeline_as_pipe():
     assert doc.text[word_anns[1]["start"] : word_anns[1]["end"]] == "night"  # noqa
 
 
-test_pipeline_as_pipe()
+def test_word_extractor_without_sentence_extractor():
+    english_poem = (
+        "The night was still, the moon aglow,\nA silver thread on earth below."
+    )
+
+    doc = Document(text=english_poem)
+
+    # Try creating a pipeline with 'word extractor' without 'sentence_extractor'
+    with pytest.raises(
+        ValueError, match="Component 'word_extractor' requires 'sentence_extractor'"
+    ):
+        pipeline = Pipeline(components=["word_extractor"])
+        doc = pipeline(doc)
