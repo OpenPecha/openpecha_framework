@@ -20,6 +20,7 @@ class Document:
     def __init__(self, text=""):
         self.text = text
         self.annotations = {}
+        self.ann_text_mapping = []
 
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., annotations={list(self.annotations.keys())})"
