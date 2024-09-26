@@ -14,8 +14,9 @@ class FilterText(Pipe):
                 english_lines.append(line)
             else:
                 tibetan_lines.append(line)
-        doc.english_text = " ".join(english_lines)
-        doc.tibetan_text = " ".join(tibetan_lines)
+
+        setattr(doc, "english_text", " ".join(english_lines))
+        setattr(doc, "tibetan_text", " ".join(tibetan_lines))
         return doc
 
 
@@ -29,7 +30,7 @@ class EnglishWordExtractor(Pipe):
         """
         char_count = 0
         word_anns = []
-        for word in doc.english_text.split():
+        for word in getattr(doc, "english_text").split():
             word_anns.append((char_count, char_count + len(word)))
             char_count += len(word) + 1
         doc.annotations["english_words"] = word_anns
@@ -42,11 +43,15 @@ def test_storing_ann_text_mapping():
     pipeline = Pipeline(["filter_text", "english_word_extractor"])
     doc = pipeline(doc)
 
-    assert doc.english_text == "Hello world"
+    assert hasattr(doc, "english_text")
+    assert getattr(doc, "english_text") == "Hello world"
     en_word_anns = doc.annotations["english_words"]
     assert en_word_anns == [(0, 5), (6, 11)]
     assert doc.ann_text_mapping == [("english_text", "english_words")]
 
     expected_en_words = ["Hello", "world"]
     for ann, expected_en_word in zip(en_word_anns, expected_en_words):
-        assert doc.english_text[ann[0] : ann[1]] == expected_en_word  # noqa
+        assert getattr(doc, "english_text")[ann[0] : ann[1]] == expected_en_word  # noqa
+
+
+test_storing_ann_text_mapping()

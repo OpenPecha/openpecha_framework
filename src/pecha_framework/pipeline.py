@@ -25,6 +25,13 @@ class Document:
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., annotations={list(self.annotations.keys())})"
 
+    def get_attr(self, attr: str):
+        """Get the attribute of the document."""
+        attr_val = eval(f"self.{attr}")
+        assert isinstance(attr_val, str), f"Attribute '{attr}' is not a string."
+
+        return attr_val
+
 
 class Pipeline:
     def __init__(self, components=None, **component_kwargs):
