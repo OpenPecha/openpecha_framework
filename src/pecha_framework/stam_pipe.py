@@ -103,7 +103,8 @@ class WriteStamAnn(Pipe):
         # Create AnnotationStore object which stores the annotations
         ann_store = AnnotationStore(id=pecha.pecha_id)
 
-        # Set the ann file path
+        # Set the ann file path, filename is set such that we can store relative path to it
+        # The file name would be changed later on.
         ann_store_path = pecha.layer_path / base_name / f"{ann_name}.json"
         ann_store_path.parent.mkdir(parents=True, exist_ok=True)
         ann_store.set_filename(str(ann_store_path))
@@ -127,5 +128,5 @@ class WriteStamAnn(Pipe):
             ]
             ann_store.annotate(id=get_uuid(), target=selector, data=data)
 
-        ann_store.save()
+        pecha.set_layer(base_name, ann_name, ann_store)
         return doc

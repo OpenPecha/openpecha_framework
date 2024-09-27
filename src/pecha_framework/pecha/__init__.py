@@ -1,7 +1,10 @@
+from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List
 
-from pecha_framework.ids import get_base_id, get_initial_pecha_id
+from stam import AnnotationStore
+
+from pecha_framework.ids import get_base_id, get_initial_pecha_id, get_uuid
 
 
 class Pecha:
@@ -9,13 +12,13 @@ class Pecha:
         self,
         pecha_id: str,
         pecha_path: Path,
-        bases: Dict[str, str] = None,
-        annotations: Dict[str, Dict] = None,
+        bases: defaultdict = None,
+        layers: defaultdict = None,
     ):
         self.pecha_id = pecha_id
         self.pecha_path = pecha_path
-        self.bases = bases or {}
-        self.annotations = annotations or {}
+        self.bases = bases if bases else defaultdict(str)
+        self.layers = layers if layers else defaultdict(lambda: defaultdict(str))
 
     @classmethod
     def create_pecha(cls, path: Path):
@@ -39,4 +42,14 @@ class Pecha:
     def set_base(self, content: str, name: str = None) -> str:
         name = get_base_id() if not name else name
         self.base_path.joinpath(f"{name}.txt").write_text(content, encoding="utf-8")
+        self.bases[name] = content
         return name
+
+    def set_layer(self, base_name: str, ann_name: str, ann_store: AnnotationStore):
+        ann_store_path = (
+            self.layer_path / base_name / f"{ann_name}-{get_uuid()[:3]}.json"
+        )
+        ann_store.set_filename(str(ann_store_path))
+        ann_store.save()
+        self.layers[base_name][ann_name] = ann_store
+        return ann_store_path
