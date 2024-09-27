@@ -22,17 +22,17 @@ class StamWriter(Pipe):
         self.output_path.mkdir(parents=True, exist_ok=True)
         setattr(doc, "output_path", self.output_path)
 
-        base_ann_mapping = {}
-        for ann_text_mapping in doc.ann_text_mapping:
-            text_attr, ann_name = ann_text_mapping
-            if text_attr not in base_ann_mapping:
-                base_ann_mapping[text_attr] = [ann_name]
+        formatted_base_ann_mapping = {}
+        for base_ann_mapping in doc.base_ann_mapping:
+            text_attr, ann_name = base_ann_mapping
+            if text_attr not in formatted_base_ann_mapping:
+                formatted_base_ann_mapping[text_attr] = [ann_name]
             else:
-                base_ann_mapping[text_attr].append(ann_name)
+                formatted_base_ann_mapping[text_attr].append(ann_name)
 
         if self.same_pecha:
             doc = self.components["create_pecha"](doc)  # type: ignore
-            for text_attr, _ in base_ann_mapping.items():
+            for text_attr, _ in formatted_base_ann_mapping.items():
                 doc = self.components["create_base_text"](doc, doc.get_attr(text_attr))  # type: ignore
 
         return doc

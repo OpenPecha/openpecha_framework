@@ -15,13 +15,13 @@ class LineExtractor(Pipe):
             line_anns.append((char_count, char_count + len(line)))
             char_count += len(line) + 1
         doc.annotations["lines"] = line_anns
-        doc.ann_text_mapping.append(("text", "lines"))
+        doc.base_ann_mapping.append(("text", "lines"))
         return doc
 
 
-def test_storing_ann_text_mapping():
+def test_storing_base_ann_mapping():
     doc = Document(text="Hello, world!\nThis is a test.")
     pipeline = Pipeline(["line_extractor"])
     doc = pipeline(doc)
     assert doc.annotations["lines"] == [(0, 13), (14, 29)]
-    assert doc.ann_text_mapping == [("text", "lines")]
+    assert doc.base_ann_mapping == [("text", "lines")]

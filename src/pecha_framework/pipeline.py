@@ -17,10 +17,10 @@ class Pipe:
 
 
 class Document:
-    def __init__(self, text="", annotations=None, ann_text_mapping=None):
+    def __init__(self, text="", annotations=None, base_ann_mapping=None):
         self.text = text
         self.annotations = annotations or {}
-        self.ann_text_mapping = ann_text_mapping or []
+        self.base_ann_mapping = base_ann_mapping or []
 
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., annotations={list(self.annotations.keys())})"

@@ -8,7 +8,7 @@ def test_stam_writer():
     doc = Document(
         text="Hello, world!\nThis is a test.",
         annotations={"lines": [(0, 13), (14, 29)]},
-        ann_text_mapping=[("text", "lines")],
+        base_ann_mapping=[("text", "lines")],
     )
 
     output_path = Path(__file__).parent / "output"
