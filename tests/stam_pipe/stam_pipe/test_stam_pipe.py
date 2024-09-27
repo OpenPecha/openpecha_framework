@@ -1,10 +1,10 @@
 from pathlib import Path
 
 from pecha_framework import Document, Pipeline
-from pecha_framework.stam_pipe import StamWriter  # noqa
+from pecha_framework.stam_pipe import StamPipe  # noqa
 
 
-def test_stam_writer():
+def test_stam_pipe():
     doc = Document(
         text="Hello, world!\nThis is a test.",
         annotations={"lines": [(0, 13), (14, 28)]},
@@ -13,10 +13,10 @@ def test_stam_writer():
 
     output_path = Path(__file__).parent / "output"
 
-    component_names = ["stam_writer"]
-    component_kwargs = {"stam_writer": {"output_path": output_path}}
+    component_names = ["stam_pipe"]
+    component_kwargs = {"stam_pipe": {"output_path": output_path}}
     pipeline = Pipeline(components=component_names, **component_kwargs)
     doc = pipeline(doc)
 
 
-test_stam_writer()
+test_stam_pipe()

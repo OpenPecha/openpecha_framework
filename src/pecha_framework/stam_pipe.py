@@ -9,8 +9,8 @@ from pecha_framework.ids import get_uuid
 from pecha_framework.pecha import Pecha
 
 
-class StamWriter(Pipe):
-    name = "stam_writer"
+class StamPipe(Pipe):
+    name = "stam_pipe"
 
     def __init__(self, output_path: Path, same_pecha: bool = True):
         self.output_path = output_path
