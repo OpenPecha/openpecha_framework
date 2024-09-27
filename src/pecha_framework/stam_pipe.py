@@ -1,7 +1,7 @@
 from pathlib import Path
 
+from pecha_framework import Document, Pipe
 from pecha_framework.pecha import Pecha
-from pecha_framework.pipeline import Document, Pipe
 
 
 class StamWriter(Pipe):

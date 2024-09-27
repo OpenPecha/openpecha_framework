@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pecha_framework.pipeline import Document, Pipeline
+from pecha_framework import Document, Pipeline
 from pecha_framework.stam_pipe import StamWriter  # noqa
 
 

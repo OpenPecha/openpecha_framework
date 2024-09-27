@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pecha_framework.pipeline import Document, Pipe, Pipeline
+from pecha_framework import Document, Pipe, Pipeline
 
 
 class PageTextExtractor(Pipe):
