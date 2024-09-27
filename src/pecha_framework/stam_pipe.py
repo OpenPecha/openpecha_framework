@@ -18,9 +18,7 @@ class StamPipe(Pipe):
         self.components = {
             "create_pecha": CreatePecha(output_path=self.output_path),
             "create_base_text": CreateBaseText(output_path=self.output_path),
-            "create_stam_annotation_file": CreateStamAnnotationFile(
-                output_path=self.output_path
-            ),
+            "write_stam_ann": WriteStamAnn(output_path=self.output_path),
         }
 
     def __call__(self, doc: Document):
@@ -42,7 +40,7 @@ class StamPipe(Pipe):
                     doc, pecha_attr, doc.get_attr(base_attr)  # type: ignore
                 )
                 for ann_name in ann_names:
-                    doc = self.components["create_stam_annotation_file"](
+                    doc = self.components["write_stam_ann"](
                         doc,  # type: ignore
                         pecha_attr,
                         base_name,
@@ -84,8 +82,8 @@ class CreateBaseText(Pipe):
         return doc, base_name
 
 
-class CreateStamAnnotationFile(Pipe):
-    name = "create_stam_annotation_file"
+class WriteStamAnn(Pipe):
+    name = "write_stam_ann"
 
     def __init__(self, output_path: Path):
         self.output_path = output_path
