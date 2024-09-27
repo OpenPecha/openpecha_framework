@@ -20,6 +20,8 @@ class Document:
     def __init__(self, text="", annotations=None, base_ann_mapping=None):
         self.text = text
         self.annotations = annotations or {}
+        # Store the attr which stores base text and ann rather than the
+        # actual base text and ann
         self.base_ann_mapping = base_ann_mapping or []
 
     def __repr__(self):

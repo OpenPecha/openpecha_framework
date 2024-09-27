@@ -21,7 +21,13 @@ class Pecha:
         base_path.mkdir(parents=True, exist_ok=True)
         return base_path
 
+    @property
+    def layer_path(self):
+        layer_path = self.pecha_path / "layer"
+        layer_path.mkdir(parents=True, exist_ok=True)
+        return layer_path
+
     def set_base(self, content: str, name: str = None) -> str:
-        name = f"{get_base_id()}.txt" if not name else name
-        self.base_path.joinpath(name).write_text(content, encoding="utf-8")
+        name = get_base_id() if not name else name
+        self.base_path.joinpath(f"{name}.txt").write_text(content, encoding="utf-8")
         return name

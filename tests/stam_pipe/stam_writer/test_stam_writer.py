@@ -7,7 +7,7 @@ from pecha_framework.stam_pipe import StamWriter  # noqa
 def test_stam_writer():
     doc = Document(
         text="Hello, world!\nThis is a test.",
-        annotations={"lines": [(0, 13), (14, 29)]},
+        annotations={"lines": [(0, 13), (14, 28)]},
         base_ann_mapping=[("text", "lines")],
     )
 
