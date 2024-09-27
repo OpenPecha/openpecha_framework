@@ -1,4 +1,6 @@
-from typing import List
+from typing import Dict, List
+
+from pydantic import BaseModel, ConfigDict, Field, validator
 
 # Global component registry
 component_registry = {}
@@ -16,13 +18,12 @@ class Pipe:
             cls.requires = []
 
 
-class Document:
-    def __init__(self, text="", annotations=None, base_ann_mapping=None):
-        self.text = text
-        self.annotations = annotations or {}
-        # Store the attr which stores base text and ann rather than the
-        # actual base text and ann
-        self.base_ann_mapping = base_ann_mapping or []
+class Document(BaseModel):
+    text: str = Field(default="")
+    annotations: Dict[str, list] = Field(default_factory=dict)
+    base_ann_mapping: List = Field(default_factory=list)
+
+    model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
 
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., annotations={list(self.annotations.keys())})"
