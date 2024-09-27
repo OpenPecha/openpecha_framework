@@ -1,12 +1,21 @@
 from pathlib import Path
+from typing import Dict, List
 
 from pecha_framework.ids import get_base_id, get_initial_pecha_id
 
 
 class Pecha:
-    def __init__(self, pecha_id: str, pecha_path: Path):
+    def __init__(
+        self,
+        pecha_id: str,
+        pecha_path: Path,
+        bases: Dict[str, str] = None,
+        annotations: Dict[str, Dict] = None,
+    ):
         self.pecha_id = pecha_id
         self.pecha_path = pecha_path
+        self.bases = bases or {}
+        self.annotations = annotations or {}
 
     @classmethod
     def create_pecha(cls, path: Path):

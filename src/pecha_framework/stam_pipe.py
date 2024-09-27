@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 from typing import List, Tuple
 
@@ -28,21 +29,22 @@ class StamWriter(Pipe):
         """
         self.output_path.mkdir(parents=True, exist_ok=True)
 
-        formatted_base_ann_mapping = {}
-        for base_ann_mapping in doc.base_ann_mapping:
-            text_attr, ann_name = base_ann_mapping
-            if text_attr not in formatted_base_ann_mapping:
-                formatted_base_ann_mapping[text_attr] = [ann_name]
-            else:
-                formatted_base_ann_mapping[text_attr].append(ann_name)
+        # Create a mapping of text attributes to annotation names
+        formatted_base_ann_mapping = defaultdict(list)
+        for base_attr, ann_name in doc.base_ann_mapping:
+            formatted_base_ann_mapping[base_attr].append(ann_name)
 
         if self.same_pecha:
-            doc = self.components["create_pecha"](doc)  # type: ignore
-            for text_attr, ann_names in formatted_base_ann_mapping.items():
-                doc, base_name = self.components["create_base_text"](doc, doc.get_attr(text_attr))  # type: ignore
+            pecha_attr = "pecha"
+            doc = self.components["create_pecha"](doc, pecha_attr)  # type: ignore
+            for base_attr, ann_names in formatted_base_ann_mapping.items():
+                doc, base_name = self.components["create_base_text"](
+                    doc, pecha_attr, doc.get_attr(base_attr)  # type: ignore
+                )
                 for ann_name in ann_names:
                     doc = self.components["create_stam_annotation_file"](
                         doc,  # type: ignore
+                        pecha_attr,
                         base_name,
                         ann_name,
                         doc.annotations[ann_name],
@@ -57,12 +59,12 @@ class CreatePecha(Pipe):
     def __init__(self, output_path: Path):
         self.output_path = output_path
 
-    def __call__(self, doc: Document):
+    def __call__(self, doc: Document, pecha_attr: str):
         """
         Create a pecha from the Document object.
         """
         pecha = Pecha.create_pecha(self.output_path)
-        setattr(doc, "pecha", pecha)
+        setattr(doc, pecha_attr, pecha)
         return doc
 
 
@@ -73,11 +75,11 @@ class CreateBaseText(Pipe):
     def __init__(self, output_path: Path):
         self.output_path = output_path
 
-    def __call__(self, doc: Document, base_text: str):
+    def __call__(self, doc: Document, pecha_attr: str, base_text: str):
         """
         Create a base text from the Document object.
         """
-        pecha = getattr(doc, "pecha")
+        pecha = getattr(doc, pecha_attr)
         base_name = pecha.set_base(base_text)
         return doc, base_name
 
@@ -89,12 +91,17 @@ class CreateStamAnnotationFile(Pipe):
         self.output_path = output_path
 
     def __call__(
-        self, doc: Document, base_name: str, ann_name: str, annotations: List[Tuple]
+        self,
+        doc: Document,
+        pecha_attr: str,
+        base_name: str,
+        ann_name: str,
+        annotations: List[Tuple],
     ):
         """
         Create a stam annotation file from the Document object.
         """
-        pecha = getattr(doc, "pecha")
+        pecha = getattr(doc, pecha_attr)
         # Create AnnotationStore object which stores the annotations
         ann_store = AnnotationStore(id=pecha.pecha_id)
 
@@ -123,3 +130,4 @@ class CreateStamAnnotationFile(Pipe):
             ann_store.annotate(id=get_uuid(), target=selector, data=data)
 
         ann_store.save()
+        return doc
