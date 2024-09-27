@@ -95,13 +95,21 @@ class CreateStamAnnotationFile(Pipe):
         Create a stam annotation file from the Document object.
         """
         pecha = getattr(doc, "pecha")
+        # Create AnnotationStore object which stores the annotations
         ann_store = AnnotationStore(id=pecha.pecha_id)
+
+        # Set the ann file path
+        ann_store_path = pecha.layer_path / base_name / f"{ann_name}.json"
+        ann_store_path.parent.mkdir(parents=True, exist_ok=True)
+        ann_store.set_filename(str(ann_store_path))
+
+        # Map the base text to the annotation with relative path
         ann_resource = ann_store.add_resource(
-            id=f"{base_name}.txt",
-            filename=(pecha.base_path / f"{base_name}.txt").as_posix(),
+            id=f"{base_name}.txt", filename=(f"../../base/{base_name}.txt")
         )
         ann_dataset = ann_store.add_dataset(id="Dataset")
 
+        # Annotate
         for start, end in annotations:
             selector = Selector.textselector(ann_resource, Offset.simple(start, end))
             data = [
@@ -114,7 +122,4 @@ class CreateStamAnnotationFile(Pipe):
             ]
             ann_store.annotate(id=get_uuid(), target=selector, data=data)
 
-        ann_store_path = pecha.layer_path / base_name / f"{ann_name}.json"
-        ann_store_path.parent.mkdir(parents=True, exist_ok=True)
-        ann_store.set_filename(str(ann_store_path))
         ann_store.save()
