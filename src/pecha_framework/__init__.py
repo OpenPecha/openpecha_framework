@@ -29,7 +29,19 @@ class Document(BaseModel):
 
     @classmethod
     def from_pecha(cls, pecha: Pecha):
-        return cls(pecha=pecha)
+        annotations = {}
+        base_ann_mapping = []
+        for base_name, anns in pecha.layers.items():
+            for ann_name, ann_store in anns.items():
+                annotations[ann_name] = pecha.get_annotations(ann_store)
+                base_ann_mapping.append((base_name, ann_name))
+
+        return cls(
+            annotations=annotations,
+            base_ann_mapping=base_ann_mapping,
+            pecha=pecha,
+            **pecha.bases,
+        )
 
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., annotations={list(self.annotations.keys())})"

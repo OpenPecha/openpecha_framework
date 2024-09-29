@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import DefaultDict, Dict, Optional
+from typing import DefaultDict, Optional
 
 from stam import AnnotationStore
 
@@ -80,3 +80,12 @@ class Pecha:
         ann_store.save()
         self.layers[base_name][ann_name] = ann_store
         return ann_store_path
+
+    @staticmethod
+    def get_annotations(ann_store: AnnotationStore):
+        anns = []
+        for ann in ann_store:
+            start = ann.offset().begin().value()
+            end = ann.offset().end().value()
+            anns.append((start, end))
+        return anns
