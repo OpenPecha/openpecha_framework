@@ -1,6 +1,6 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List
+from typing import DefaultDict, Dict, Optional
 
 from stam import AnnotationStore
 
@@ -12,8 +12,8 @@ class Pecha:
         self,
         pecha_id: str,
         pecha_path: Path,
-        bases: defaultdict = None,
-        layers: defaultdict = None,
+        bases: Optional[DefaultDict[str, str]] = None,
+        layers: Optional[DefaultDict[str, DefaultDict[str, AnnotationStore]]] = None,
     ):
         self.pecha_id = pecha_id
         self.pecha_path = pecha_path
@@ -26,6 +26,33 @@ class Pecha:
         pecha_path = path / pecha_id
         pecha_path.mkdir(parents=True, exist_ok=True)
         return cls(pecha_id, pecha_path)
+
+    @classmethod
+    def from_path(cls, pecha_path: Path):
+        pecha_id = pecha_path.name
+
+        # load base files
+        base_files = list(pecha_path.joinpath("base").rglob("*.txt"))
+        bases = defaultdict(
+            str,
+            {
+                base_file.stem: base_file.read_text(encoding="utf-8")
+                for base_file in base_files
+            },
+        )
+
+        # load layer files
+        layers: DefaultDict[str, DefaultDict[str, AnnotationStore]] = defaultdict(
+            lambda: defaultdict(str)
+        )
+        layer_files = list(pecha_path.joinpath("layer").rglob("*.json"))
+        for layer_file in layer_files:
+            base_name = layer_file.parent.name
+            ann_name = layer_file.stem.split("-")[0]
+            ann_store = AnnotationStore(file=layer_file.as_posix())
+            layers[base_name][ann_name] = ann_store
+
+        return cls(pecha_id, pecha_path, bases, layers)
 
     @property
     def base_path(self):
