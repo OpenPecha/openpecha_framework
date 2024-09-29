@@ -48,6 +48,10 @@ class StamPipe(Pipe):
                         doc.annotations[ann_name],
                     )
 
+        else:
+            # This part is not implemented yet
+            pass
+
         return doc
 
 
