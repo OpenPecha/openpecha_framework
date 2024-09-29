@@ -2,6 +2,8 @@ from typing import Dict, List
 
 from pydantic import BaseModel, ConfigDict, Field, validator
 
+from pecha_framework.pecha import Pecha
+
 # Global component registry
 component_registry = {}
 
@@ -24,6 +26,10 @@ class Document(BaseModel):
     base_ann_mapping: List = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
+
+    @classmethod
+    def from_pecha(cls, pecha: Pecha):
+        return cls(pecha=pecha)
 
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., annotations={list(self.annotations.keys())})"
