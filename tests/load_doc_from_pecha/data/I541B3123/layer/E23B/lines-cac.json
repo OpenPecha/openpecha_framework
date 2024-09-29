@@ -1,0 +1,97 @@
+{
+  "@type": "AnnotationStore",
+  "@id": "I541B3123",
+  "resources": [
+    {
+      "@type": "TextResource",
+      "@id": "E23B.txt",
+      "@include": "../../base/E23B.txt"
+    }
+  ],
+  "annotationsets": [
+    {
+      "@type": "AnnotationDataSet",
+      "@id": "Dataset",
+      "keys": [
+        {
+          "@type": "DataKey",
+          "@id": "StructureType"
+        }
+      ],
+      "data": [
+        {
+          "@type": "AnnotationData",
+          "@id": "cf2f927a452a488987e4d6f42e9e44c8",
+          "key": "StructureType",
+          "value": {
+            "@type": "String",
+            "value": "lines"
+          }
+        },
+        {
+          "@type": "AnnotationData",
+          "@id": "169283d93ca748f39427fbe2e03cd938",
+          "key": "StructureType",
+          "value": {
+            "@type": "String",
+            "value": "lines"
+          }
+        }
+      ]
+    }
+  ],
+  "annotations": [
+    {
+      "@type": "Annotation",
+      "@id": "a7f824b913314172a8f932412c427b32",
+      "target": {
+        "@type": "TextSelector",
+        "resource": "E23B.txt",
+        "offset": {
+          "@type": "Offset",
+          "begin": {
+            "@type": "BeginAlignedCursor",
+            "value": 0
+          },
+          "end": {
+            "@type": "BeginAlignedCursor",
+            "value": 13
+          }
+        }
+      },
+      "data": [
+        {
+          "@type": "AnnotationData",
+          "@id": "cf2f927a452a488987e4d6f42e9e44c8",
+          "set": "Dataset"
+        }
+      ]
+    },
+    {
+      "@type": "Annotation",
+      "@id": "498bfff1212d4d539f0bff078aa3576b",
+      "target": {
+        "@type": "TextSelector",
+        "resource": "E23B.txt",
+        "offset": {
+          "@type": "Offset",
+          "begin": {
+            "@type": "BeginAlignedCursor",
+            "value": 14
+          },
+          "end": {
+            "@type": "BeginAlignedCursor",
+            "value": 28
+          }
+        }
+      },
+      "data": [
+        {
+          "@type": "AnnotationData",
+          "@id": "169283d93ca748f39427fbe2e03cd938",
+          "set": "Dataset"
+        }
+      ]
+    }
+  ]
+}
