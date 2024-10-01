@@ -21,7 +21,8 @@ def test_complex_text_parser():
     doc = pipeline(doc)
 
     pecha = getattr(doc, "pecha")
-    # Check if sapche annotation stam file is saved to pecha
+
+    # Check if sapche annotations
     sapche_ann_stores = []
     for _, anns in pecha.layers.items():
         for ann_name, ann_store in anns.items():
@@ -29,9 +30,24 @@ def test_complex_text_parser():
                 sapche_ann_stores.append(ann_store)
     assert len(sapche_ann_stores) == 1
 
-    # Check if the annotations are saved correctly
     sapches = [str(ann) for ann in sapche_ann_stores[0]]
     assert sapches == ["སེ་ཕེ།1", "སེ་ཕེ།2"]
+
+    # Check if sentence annotations
+    sentence_ann_stores = []
+    for _, anns in pecha.layers.items():
+        for ann_name, ann_store in anns.items():
+            if ann_name == "sentence":
+                sentence_ann_stores.append(ann_store)
+    assert len(sentence_ann_stores) == 1
+
+    sentences = [str(ann) for ann in sentence_ann_stores[0]]
+    assert sentences == [
+        "ཚིག་དང་པོ་ནི།",
+        "ཚིག་གཉིས་པ་ནི།",
+        "ཚིག་གསུམ་པ་ནི།",
+        "ཚིག་གསུམ་པ་ནི།",
+    ]
 
     # clean up
     rmtree(output_path)
