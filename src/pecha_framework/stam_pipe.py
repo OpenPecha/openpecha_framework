@@ -28,14 +28,14 @@ class StamPipe(Pipe):
         self.output_path.mkdir(parents=True, exist_ok=True)
 
         # Create a mapping of text attributes to annotation names
-        formatted_base_ann_mapping = defaultdict(list)
-        for base_attr, ann_name in doc.base_ann_mapping:
-            formatted_base_ann_mapping[base_attr].append(ann_name)
+        formatted_resource_ann_mapping = defaultdict(list)
+        for base_attr, ann_name in doc.resource_ann_mapping:
+            formatted_resource_ann_mapping[base_attr].append(ann_name)
 
         if self.same_pecha:
             pecha_attr = "pecha"
             doc = self.components["create_pecha"](doc, pecha_attr)  # type: ignore
-            for base_attr, ann_names in formatted_base_ann_mapping.items():
+            for base_attr, ann_names in formatted_resource_ann_mapping.items():
                 doc, base_name = self.components["create_base_text"](
                     doc, pecha_attr, doc.get_attr(base_attr)  # type: ignore
                 )

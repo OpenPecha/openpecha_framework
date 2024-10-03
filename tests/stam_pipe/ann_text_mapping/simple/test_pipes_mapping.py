@@ -34,11 +34,11 @@ class EnglishWordExtractor(Pipe):
             word_anns.append((char_count, char_count + len(word)))
             char_count += len(word) + 1
         doc.annotations["english_words"] = word_anns
-        doc.base_ann_mapping.append(("english_text", "english_words"))
+        doc.resource_ann_mapping.append(("english_text", "english_words"))
         return doc
 
 
-def test_storing_base_ann_mapping():
+def test_storing_resource_ann_mapping():
     doc = Document(text="Hello world\nའཇིག་རྟེན་ཁམས་བདེ་ལེགས།")
     pipeline = Pipeline(["filter_text", "english_word_extractor"])
     doc = pipeline(doc)
@@ -47,11 +47,11 @@ def test_storing_base_ann_mapping():
     assert getattr(doc, "english_text") == "Hello world"
     en_word_anns = doc.annotations["english_words"]
     assert en_word_anns == [(0, 5), (6, 11)]
-    assert doc.base_ann_mapping == [("english_text", "english_words")]
+    assert doc.resource_ann_mapping == [("english_text", "english_words")]
 
     expected_en_words = ["Hello", "world"]
     for ann, expected_en_word in zip(en_word_anns, expected_en_words):
         assert getattr(doc, "english_text")[ann[0] : ann[1]] == expected_en_word  # noqa
 
 
-test_storing_base_ann_mapping()
+test_storing_resource_ann_mapping()

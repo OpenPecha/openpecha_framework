@@ -32,7 +32,7 @@ class SapcheExtractor(Pipe):
             doc.spans_to_avoid.append(sapche_text_and_ann_span)
 
         doc.annotations["sapche"] = sapche_anns
-        doc.base_ann_mapping.append(("text", "sapche"))
+        doc.resource_ann_mapping.append(("text", "sapche"))
         return doc
 
 
@@ -65,5 +65,5 @@ class SentenceExtractor(Pipe):
             char_count += len(text)
 
         doc.annotations["sentence"] = sentence_anns
-        doc.base_ann_mapping.append(("text", "sentence"))
+        doc.resource_ann_mapping.append(("text", "sentence"))
         return doc

@@ -23,22 +23,22 @@ class Pipe:
 class Document(BaseModel):
     text: str = Field(default="")
     annotations: Dict[str, list] = Field(default_factory=dict)
-    base_ann_mapping: List = Field(default_factory=list)
+    resource_ann_mapping: List = Field(default_factory=list)
 
     model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
 
     @classmethod
     def from_pecha(cls, pecha: Pecha):
         annotations = {}
-        base_ann_mapping = []
+        resource_ann_mapping = []
         for base_name, anns in pecha.layers.items():
             for ann_name, ann_store in anns.items():
                 annotations[ann_name] = pecha.get_annotations(ann_store)
-                base_ann_mapping.append((base_name, ann_name))
+                resource_ann_mapping.append((base_name, ann_name))
 
         return cls(
             annotations=annotations,
-            base_ann_mapping=base_ann_mapping,
+            resource_ann_mapping=resource_ann_mapping,
             pecha=pecha,
             **pecha.bases,
         )

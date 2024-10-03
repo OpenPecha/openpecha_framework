@@ -34,12 +34,12 @@ class PageContentExtractor(Pipe):
         for idx, page in enumerate(getattr(doc, "pages")):
             page_no, _ = page.split("\n", 1)[0], page.split("\n", 1)[1]
             doc.annotations[page_no] = [(len(page_no) + 1, len(page))]
-            doc.base_ann_mapping.append((f"pages[{idx}]", page_no))
+            doc.resource_ann_mapping.append((f"pages[{idx}]", page_no))
 
         return doc
 
 
-def test_storing_base_ann_mapping():
+def test_storing_resource_ann_mapping():
     data = Path(__file__).parent / "data"
     volume_text = Path(data / "V001.txt").read_text(encoding="utf-8")
     doc = Document(text=volume_text)
@@ -58,16 +58,16 @@ def test_storing_base_ann_mapping():
         "Page 3": [(7, 14)],
     }
     # Check if the ann text mapping is stored correctly
-    assert doc.base_ann_mapping == [
+    assert doc.resource_ann_mapping == [
         ("pages[0]", "Page 1"),
         ("pages[1]", "Page 2"),
         ("pages[2]", "Page 3"),
     ]
 
-    # Check if we are able to access the page content using the base_ann_mapping
+    # Check if we are able to access the page content using the resource_ann_mapping
     assert doc.get_attr("pages[0]")[7:11] == "BDRC"
     assert doc.get_attr("pages[1]")[7:14] == "Chonjuk"
     assert doc.get_attr("pages[2]")[7:14] == "MT Data"
 
 
-test_storing_base_ann_mapping()
+test_storing_resource_ann_mapping()
