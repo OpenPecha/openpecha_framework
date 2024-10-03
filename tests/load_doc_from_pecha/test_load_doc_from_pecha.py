@@ -24,7 +24,7 @@ def test_load_doc_from_pecha():
     # Check if doc values are properly loaded from pecha
     assert doc.annotations == {"lines": [(0, 13), (14, 28)]}
     assert doc.resource_ann_mapping == [("E23B", "lines")]
-    assert doc.E23B == "Hello, world!\nThis is a test."
+    assert doc.resources == {"E23B": "Hello, world!\nThis is a test."}
 
 
 test_load_doc_from_pecha()

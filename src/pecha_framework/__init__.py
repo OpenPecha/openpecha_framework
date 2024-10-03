@@ -39,9 +39,9 @@ class Document(BaseModel):
 
         return cls(
             annotations=annotations,
+            resources=pecha.bases,
             resource_ann_mapping=resource_ann_mapping,
             pecha=pecha,
-            **pecha.bases,
         )
 
     def __repr__(self):
