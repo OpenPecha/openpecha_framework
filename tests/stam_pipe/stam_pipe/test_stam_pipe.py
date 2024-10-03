@@ -8,7 +8,8 @@ from pecha_framework.stam_pipe import StamPipe  # noqa
 
 def test_stam_pipe():
     doc = Document(
-        text="Hello, world!\nThis is a test.",
+        text="",
+        resources={"text": "Hello, world!\nThis is a test."},
         annotations={"lines": [(0, 13), (14, 28)]},
         resource_ann_mapping=[("text", "lines")],
     )

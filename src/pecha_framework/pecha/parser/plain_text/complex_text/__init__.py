@@ -19,8 +19,10 @@ class SapcheExtractor(Pipe):
     name = "sapche_extractor"
 
     def __call__(self, doc: Document):
+        doc.resources["text"] = doc.text
+
         sapche_pattern = r"<sapche>(.*?)<\/sapche>"
-        matches = re.finditer(sapche_pattern, doc.text)
+        matches = re.finditer(sapche_pattern, doc.resources["text"])
 
         sapche_anns = []
         # Store the spans to avoid for subsequent components
@@ -41,8 +43,7 @@ class SentenceExtractor(Pipe):
     requires = ["sapche_extractor"]
 
     def __call__(self, doc: Document):
-        splited_text = re.split(r"[\s\n]+", doc.text)
-        splited_text = re.findall(r"\S+|\s+", doc.text)
+        splited_text = re.findall(r"\S+|\s+", doc.resources["text"])
 
         char_count = 0
 

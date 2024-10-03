@@ -37,7 +37,7 @@ class StamPipe(Pipe):
             doc = self.components["create_pecha"](doc, pecha_attr)  # type: ignore
             for base_attr, ann_names in formatted_resource_ann_mapping.items():
                 doc, base_name = self.components["create_base_text"](
-                    doc, pecha_attr, doc.get_attr(base_attr)  # type: ignore
+                    doc, pecha_attr, doc.resources[base_attr]  # type: ignore
                 )
                 for ann_name in ann_names:
                     doc = self.components["write_stam_ann"](
